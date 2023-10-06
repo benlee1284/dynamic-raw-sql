@@ -97,3 +97,30 @@ def test_add_from_clause_to_existing_query() -> None:
     ).from_("table")
 
     assert query.build() == "SELECT column_1, column_2, SUM(column_3) FROM table"
+
+
+@pytest.mark.parametrize(
+    "conditions, expected_query",
+    [
+        pytest.param(
+            ["1=1"],
+            "SELECT  WHERE 1=1",
+            id="singular_condition"
+        ),
+        pytest.param(
+            ["1=1", "column_1=42"],
+            "SELECT  WHERE 1=1 AND column_1=42",
+            id="multiple_conditions"
+        ),
+        pytest.param(
+            ["column_1=%s"],
+            "SELECT  WHERE column_1=%s",
+            id="condition_with_parameter"
+        ),
+    ],
+)
+def test_add_where_clause_to_empty_query(conditions: list[str], expected_query: str) -> None:
+    query = SelectQuery().where(*conditions)
+
+    assert query.build() == expected_query
+
