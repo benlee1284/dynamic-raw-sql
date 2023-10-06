@@ -60,6 +60,21 @@ def test_add_select_statements_to_existing_query(
             id="singular_select"
         ),
         pytest.param(
+            ["%s"],
+            "SELECT %s",
+            id="select_with_parameter"
+        ),
+        pytest.param(
+            ["'USD'"],
+            "SELECT 'USD'",
+            id="select_constant"
+        ),
+        pytest.param(
+            [1, "2", 3.14, (12, 44)],
+            "SELECT 1, 2, 3.14, (12, 44)",
+            id="multiple_selects_list_variate_types"
+        ),
+        pytest.param(
             ["1", "2", "3"],
             "SELECT 1, 2, 3",
             id="multiple_selects_list"
