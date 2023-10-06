@@ -19,7 +19,10 @@ class SelectQuery:
         ):
             self.__select_elements = list(select_elements)
         else:
-            raise TypeError()
+            raise TypeError(
+                "Param `select_elements` accepts only an iterable of literals. "
+                f"Type {type(select_elements)} was given."
+            )
 
         if where_conditions is None:
             self.__where_conditions = []
@@ -29,7 +32,10 @@ class SelectQuery:
         ):
             self.__where_conditions = list(where_conditions)
         else:
-            raise TypeError()
+            raise TypeError(
+                "Param `where_conditions` accepts only an iterable of literals. "
+                f"Type {type(select_elements)} was given."
+            )
 
     def from_(self, table: str) -> Self:
         self.__from_table = table
