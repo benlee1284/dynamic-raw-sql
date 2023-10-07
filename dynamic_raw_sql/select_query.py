@@ -38,8 +38,13 @@ class SelectQuery:
             )
 
     def from_(self, table: str) -> Self:
-        self.__from_table = table
-        return self
+        if isinstance(table, str):
+            self.__from_table = table
+            return self
+        else:
+            raise TypeError(
+                f"From table must be of type string. Type {type(table)} was given."
+            )
 
     def select(self, *statements: Any) -> Self:
         if isinstance(statements, Iterable) and not isinstance(statements, str):
