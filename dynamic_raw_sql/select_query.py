@@ -9,7 +9,13 @@ class SelectQuery:
         select_elements: Iterable[Literal] = None,
         where_conditions: Iterable[str] = None,
     ) -> None:
-        self.__from_table = from_table
+        if isinstance(from_table, str) or from_table is None:
+            self.__from_table = from_table
+        else:
+            raise TypeError(
+                "From table must be of type str or None. "
+                f"Type {type(from_table)} was given."
+            )
 
         if select_elements is None:
             self.__select_elements = []
