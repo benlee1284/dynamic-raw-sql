@@ -3,6 +3,18 @@ from typing import Any, Literal, Self
 
 
 class SelectQuery:
+    __slots__ = (
+        "__from_table",
+        "__select_elements",
+        "__where_conditions",
+        "__group_by_elements",
+    )
+
+    __from_table: str
+    __select_elements: list[Any]
+    __where_conditions: list[str]
+    __group_by_elements: list[Any]
+
     def __init__(
         self,
         from_table: str = None,
