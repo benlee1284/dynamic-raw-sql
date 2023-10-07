@@ -58,6 +58,8 @@ class SelectQuery:
         return self
 
     def where(self, *conditions: tuple[str]) -> Self:
+        if not all(isinstance(condition, str) for condition in conditions):
+            raise TypeError("Where conditions must all be of type string.")
         self.__where_conditions += list(conditions)
         return self
 
