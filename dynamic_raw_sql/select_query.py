@@ -6,12 +6,14 @@ class SelectQuery:
     __slots__ = (
         "__from_table",
         "__select_elements",
+        "__joins",
         "__where_conditions",
         "__group_by_elements",
     )
 
     __from_table: str
     __select_elements: list[Any]
+    __joins: list[str]
     __where_conditions: list[str]
     __group_by_elements: list[Any]
 
@@ -19,6 +21,7 @@ class SelectQuery:
         self,
         from_table: str = None,
         select_elements: Iterable[Literal] = None,
+        joins: Iterable[str] = None,
         where_conditions: Iterable[str] = None,
         group_by_elements: Iterable[Any] = None,
     ) -> None:
@@ -41,6 +44,8 @@ class SelectQuery:
                 "Param `select_elements` accepts only an iterable of literals. "
                 f"Type {type(select_elements)} was given."
             )
+
+        self.__joins = joins
 
         if where_conditions is None:
             self.__where_conditions = []
@@ -96,6 +101,9 @@ class SelectQuery:
         query_string = f"SELECT {', '.join(str(x) for x in self.__select_elements)}"
         if self.__from_table is not None:
             query_string += f" FROM {self.__from_table}"
+
+        if self.__joins:
+            query_string = " ".join([query_string] + self.__joins)
 
         if self.__where_conditions:
             query_string += f" WHERE {' AND '.join(self.__where_conditions)}"
