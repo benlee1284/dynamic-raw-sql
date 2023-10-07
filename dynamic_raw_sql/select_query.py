@@ -52,18 +52,12 @@ class SelectQuery:
                 f"From table must be of type string. Type {type(table)} was given."
             )
 
-    def select(self, *statements: Any) -> Self:
-        if isinstance(statements, Iterable) and not isinstance(statements, str):
-            self.__select_elements += list(statements)
-        else:
-            self.__select_elements += [statements]
+    def select(self, *statements: tuple[Any]) -> Self:
+        self.__select_elements += list(statements)
         return self
 
-    def where(self, *conditions: str) -> Self:
-        if isinstance(conditions, Iterable) and not isinstance(conditions, str):
-            self.__where_conditions += list(conditions)
-        else:
-            self.__where_conditions += [conditions]
+    def where(self, *conditions: tuple[str]) -> Self:
+        self.__where_conditions += list(conditions)
         return self
 
     def build(self) -> str:
