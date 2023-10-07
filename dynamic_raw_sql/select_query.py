@@ -87,6 +87,10 @@ class SelectQuery:
         self.__where_conditions += list(conditions)
         return self
 
+    def group_by(self, *statements: tuple[Any]) -> Self:
+        self.__group_by_elements += list(statements)
+        return self
+
     def build(self) -> str:
         "Build SQL query string"
         query_string = f"SELECT {', '.join(str(x) for x in self.__select_elements)}"
