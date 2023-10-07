@@ -8,6 +8,7 @@ class SelectQuery:
         from_table: str = None,
         select_elements: Iterable[Literal] = None,
         where_conditions: Iterable[str] = None,
+        group_by: Iterable[Any] = None,
     ) -> None:
         if isinstance(from_table, str) or from_table is None:
             self.__from_table = from_table
@@ -43,6 +44,11 @@ class SelectQuery:
                 f"Type {type(select_elements)} was given."
             )
 
+        if group_by is not None:
+            self.__group_by_elements = list(group_by)
+        else:
+            self.__group_by_elements = []
+
     def from_(self, table: str) -> Self:
         if isinstance(table, str):
             self.__from_table = table
@@ -70,5 +76,8 @@ class SelectQuery:
 
         if self.__where_conditions:
             query_string += f" WHERE {' AND '.join(self.__where_conditions)}"
+
+        if self.__group_by_elements:
+            query_string += f"GROUP BY {', '.join(str(x) for x in self.__group_by_elements)}"
 
         return query_string
