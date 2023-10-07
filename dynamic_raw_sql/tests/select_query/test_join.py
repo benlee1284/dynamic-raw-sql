@@ -5,10 +5,12 @@ from dynamic_raw_sql import SelectQuery
 
 
 def test_instantiate_query_with_join_clause() -> None:
-    query = SelectQuery(joins=[
-        "INNER JOIN table2 ON 1=1",
-        "LEFT OUTER JOIN table3 ON column_1=column_2",
-    ])
+    query = SelectQuery(
+        joins=[
+            "INNER JOIN table2 ON 1=1",
+            "LEFT OUTER JOIN table3 ON column_1=column_2",
+        ]
+    )
 
     assert (
         query.build() == "SELECT  INNER JOIN table2 ON 1=1 "
@@ -27,3 +29,24 @@ def test_instantiate_query_with_join_clause() -> None:
 def test_instantiating_query_with_invalid_join_clause_erros(joins: Any) -> None:
     with pytest.raises(TypeError):
         SelectQuery(joins=joins)
+
+
+@pytest.mark.parametrize(
+    "joins, expected_query",
+    [
+        pytest.param(
+            ["INNER JOIN table2 ON 1=1"],
+            "SELECT  INNER JOIN table2 ON 1=1",
+            id="single_join",
+        ),
+        pytest.param(
+            ["INNER JOIN table2 ON 1=1", "LEFT OUTER JOIN table3 ON column_1=column_2"],
+            "SELECT  INNER JOIN table2 ON 1=1 "
+            "LEFT OUTER JOIN table3 ON column_1=column_2",
+            id="single_join",
+        ),
+    ],
+)
+def test_add_join_clauses_to_empty_query(joins: list[str], expected_query: str) -> None:
+    query = SelectQuery().join(*joins)
+    assert query.build() == expected_query
