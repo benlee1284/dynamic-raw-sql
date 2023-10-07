@@ -104,6 +104,9 @@ def test_instantiating_with_invalid_select_raises_error() -> None:
     with pytest.raises(TypeError):
         SelectQuery(select_elements="*")
 
+    with pytest.raises(TypeError):
+        SelectQuery(select_elements=11)
+
 
 def test_add_from_clause_to_empty_query() -> None:
     query = SelectQuery().from_("table")
@@ -148,3 +151,6 @@ def test_add_where_clause_to_empty_query(conditions: list[str], expected_query: 
 def test_instantiating_with_invalid_where_condition_raises_error() -> None:
     with pytest.raises(TypeError):
         SelectQuery(where_conditions="1=1")
+
+    with pytest.raises(TypeError):
+        SelectQuery(where_conditions=1)
