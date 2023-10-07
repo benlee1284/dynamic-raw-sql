@@ -1,3 +1,4 @@
+from typing import Any
 import pytest
 
 from dynamic_raw_sql import SelectQuery
@@ -89,12 +90,16 @@ def test_add_where_condition_to_existing_query(
     assert query.build() == expected_query
 
 
-def test_instantiating_with_invalid_where_condition_raises_error() -> None:
+@pytest.mark.parametrize(
+    "conditions",
+    [
+        pytest.param("1=1", id="string"),
+        pytest.param(1, id="int"),
+        pytest.param([1, 23], id="list of non-strings"),
+    ],
+)
+def test_instantiating_with_invalid_where_condition_raises_error(
+    conditions: Any
+) -> None:
     with pytest.raises(TypeError):
-        SelectQuery(where_conditions="1=1")
-
-    with pytest.raises(TypeError):
-        SelectQuery(where_conditions=1)
-
-    with pytest.raises(TypeError):
-        SelectQuery(where_conditions=[1, 23])
+        SelectQuery(where_conditions=conditions)
