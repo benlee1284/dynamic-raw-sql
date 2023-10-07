@@ -9,11 +9,11 @@ from dynamic_raw_sql import SelectQuery
     "group_by_clauses, expected_query",
     [
         pytest.param(None, "SELECT ", id="none"),
-        pytest.param(["column_1"], "SELECT GROUP BY column_1", id="singular_clause"),
+        pytest.param(["column_1"], "SELECT  GROUP BY column_1", id="singular_clause"),
         pytest.param(
-            ["column_1", "1"], "SELECT GROUP BY column_1, 1", id="multiple_clauses"
+            ["column_1", "1"], "SELECT  GROUP BY column_1, 1", id="multiple_clauses"
         ),
-        pytest.param(["column_1", 1], "SELECT GROUP BY column_1, 1", id="mixed_types"),
+        pytest.param(["column_1", 1], "SELECT  GROUP BY column_1, 1", id="mixed_types"),
     ],
 )
 def test_instantiate_query_with_groupby_clause(
@@ -26,11 +26,11 @@ def test_instantiate_query_with_groupby_clause(
 @pytest.mark.parametrize(
     "group_by_clauses, expected_query",
     [
-        pytest.param(["column_1"], "SELECT GROUP BY column_1", id="singular_clause"),
+        pytest.param(["column_1"], "SELECT  GROUP BY column_1", id="singular_clause"),
         pytest.param(
-            ["column_1", "1"], "SELECT GROUP BY column_1, 1", id="multiple_clauses"
+            ["column_1", "1"], "SELECT  GROUP BY column_1, 1", id="multiple_clauses"
         ),
-        pytest.param(["column_1", 1], "SELECT GROUP BY column_1, 1", id="mixed_types"),
+        pytest.param(["column_1", 1], "SELECT  GROUP BY column_1, 1", id="mixed_types"),
     ],
 )
 def test_add_group_by_clauses_to_empty_query(
@@ -38,6 +38,12 @@ def test_add_group_by_clauses_to_empty_query(
 ) -> None:
     query = SelectQuery().group_by(*group_by_clauses)
     assert query.build() == expected_query
+
+
+def test_add_group_by_clauses_iteratively() -> None:
+    query = SelectQuery().group_by(1)
+    query = query.group_by("column_1")
+    assert query.build() == "SELECT  GROUP BY 1, column_1"
 
 
 @pytest.mark.parametrize(

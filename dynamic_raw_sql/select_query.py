@@ -102,7 +102,7 @@ class SelectQuery:
 
         if self.__group_by_elements:
             query_string += (
-                f"GROUP BY {', '.join(str(x) for x in self.__group_by_elements)}"
+                f" GROUP BY {', '.join(str(x) for x in self.__group_by_elements)}"
             )
 
         return query_string
