@@ -98,6 +98,10 @@ class SelectQuery:
         self.__select_elements += list(statements)
         return self
 
+    def join(self, *statements: tuple[str]) -> Self:
+        self.__joins += list(statements)
+        return self
+
     def where(self, *conditions: tuple[str]) -> Self:
         if not all(isinstance(condition, str) for condition in conditions):
             raise TypeError("Where conditions must all be of type string.")
