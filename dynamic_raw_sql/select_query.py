@@ -45,7 +45,19 @@ class SelectQuery:
                 f"Type {type(select_elements)} was given."
             )
 
-        self.__joins = joins
+        if joins is None:
+            self.__joins = []
+        elif (
+            isinstance(joins, Iterable)
+            and not isinstance(joins, str)
+            and all(isinstance(join, str) for join in joins)
+        ):
+            self.__joins = list(joins)
+        else:
+            raise TypeError(
+                "Param `where_conditions` accepts only an iterable of string literals. "
+                f"Type {type(joins)} was given."
+            )
 
         if where_conditions is None:
             self.__where_conditions = []
