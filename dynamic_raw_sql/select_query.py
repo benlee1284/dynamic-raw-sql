@@ -35,11 +35,12 @@ class SelectQuery:
         elif (
             isinstance(where_conditions, Iterable)
             and not isinstance(where_conditions, str)
+            and all(isinstance(condition, str) for condition in where_conditions)
         ):
             self.__where_conditions = list(where_conditions)
         else:
             raise TypeError(
-                "Param `where_conditions` accepts only an iterable of literals. "
+                "Param `where_conditions` accepts only an iterable of string literals. "
                 f"Type {type(select_elements)} was given."
             )
 
