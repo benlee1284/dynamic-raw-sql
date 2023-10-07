@@ -95,3 +95,6 @@ def test_instantiating_with_invalid_where_condition_raises_error() -> None:
 
     with pytest.raises(TypeError):
         SelectQuery(where_conditions=1)
+
+    with pytest.raises(TypeError):
+        SelectQuery(where_conditions=[1, 23])
