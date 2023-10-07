@@ -43,10 +43,50 @@ def test_instantiating_query_with_invalid_join_clause_erros(joins: Any) -> None:
             ["INNER JOIN table2 ON 1=1", "LEFT OUTER JOIN table3 ON column_1=column_2"],
             "SELECT  INNER JOIN table2 ON 1=1 "
             "LEFT OUTER JOIN table3 ON column_1=column_2",
-            id="single_join",
+            id="two_joins",
         ),
     ],
 )
 def test_add_join_clauses_to_empty_query(joins: list[str], expected_query: str) -> None:
     query = SelectQuery().join(*joins)
     assert query.build() == expected_query
+
+
+@pytest.mark.parametrize(
+    "joins, expected_query",
+    [
+        pytest.param(
+            ["INNER JOIN table2 ON 1=1"],
+            "SELECT * FROM table INNER JOIN table2 ON 1=1",
+            id="single_join",
+        ),
+        pytest.param(
+            ["INNER JOIN table2 ON 1=1", "LEFT OUTER JOIN table3 ON column_1=column_2"],
+            "SELECT * FROM table INNER JOIN table2 ON 1=1 "
+            "LEFT OUTER JOIN table3 ON column_1=column_2",
+            id="two_joins",
+        ),
+    ],
+)
+def test_add_join_clauses_to_existing_query(
+    joins: list[str], expected_query: str
+) -> None:
+    query = SelectQuery(
+        select_elements=["*"],
+        from_table="table",
+    ).join(*joins)
+    assert query.build() == expected_query
+
+
+def test_add_join_clauses_iteratively() -> None:
+    query = SelectQuery(
+        select_elements=["*"],
+        from_table="table",
+    )
+    query = query.join("INNER JOIN table2 ON 1=1")
+    query = query.join("LEFT OUTER JOIN table3 ON column_1=column_2")
+    assert (
+        query.build() == "SELECT * FROM table "
+        "INNER JOIN table2 ON 1=1 "
+        "LEFT OUTER JOIN table3 ON column_1=column_2"
+    )
