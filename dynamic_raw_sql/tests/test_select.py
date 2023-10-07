@@ -108,6 +108,12 @@ def test_instantiating_with_invalid_select_raises_error() -> None:
         SelectQuery(select_elements=11)
 
 
+def test_instantiate_query_with_from_clause() -> None:
+    query = SelectQuery(from_table="table")
+
+    assert query.build() == "SELECT  FROM table"
+
+
 def test_add_from_clause_to_empty_query() -> None:
     query = SelectQuery().from_("table")
 
