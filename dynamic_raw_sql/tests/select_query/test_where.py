@@ -81,6 +81,21 @@ def test_add_where_condition_to_existing_query(
     assert query.build() == expected_query
 
 
+def test_add_where_conditions_iteratively_to_existing_query() -> None:
+    query = SelectQuery(
+        from_table="table",
+        select_elements=["*"],
+        where_conditions=["date='2012-12-12'"],
+    )
+    query = query.where("1=1")
+    query = query.where("column_1=42")
+
+    assert (
+        query.build()
+        == "SELECT * FROM table WHERE date='2012-12-12' AND 1=1 AND column_1=42"
+    )
+
+
 @pytest.mark.parametrize(
     "conditions",
     [
