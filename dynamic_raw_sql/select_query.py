@@ -19,9 +19,8 @@ class SelectQuery:
 
         if select_elements is None:
             self.__select_elements = []
-        elif (
-            isinstance(select_elements, Iterable)
-            and not isinstance(select_elements, str)
+        elif isinstance(select_elements, Iterable) and not isinstance(
+            select_elements, str
         ):
             self.__select_elements = list(select_elements)
         else:

@@ -17,12 +17,12 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.6',
+    python_requires=">=3.6",
     py_modules=["dynamic_raw_sql"],
-    package_dir={"":"."},
+    package_dir={"": "."},
     install_requires=[],
     project_urls={
-        'Source': 'https://github.com/benlee1284/dynamic-raw-sql',
-        'Tracker': 'https://github.com/benlee1284/dynamic-raw-sql/issues',
+        "Source": "https://github.com/benlee1284/dynamic-raw-sql",
+        "Tracker": "https://github.com/benlee1284/dynamic-raw-sql/issues",
     },
 )
