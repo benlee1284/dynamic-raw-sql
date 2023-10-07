@@ -8,6 +8,7 @@ from dynamic_raw_sql import SelectQuery
 @pytest.mark.parametrize(
     "group_by_clauses, expected_query",
     [
+        pytest.param(None, "SELECT ", id="none"),
         pytest.param(["column_1"], "SELECT GROUP BY column_1", id="singular_clause"),
         pytest.param(
             ["column_1", "1"], "SELECT GROUP BY column_1, 1", id="multiple_clauses"
