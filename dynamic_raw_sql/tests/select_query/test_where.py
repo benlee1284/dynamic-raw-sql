@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from typing import Any
 import pytest
 
@@ -103,3 +104,17 @@ def test_instantiating_with_invalid_where_condition_raises_error(
 ) -> None:
     with pytest.raises(TypeError):
         SelectQuery(where_conditions=conditions)
+
+
+@pytest.mark.parametrize(
+    "conditions",
+    [
+        pytest.param([1], id="singular non-string"),
+        pytest.param([1, 23], id="series of non-strings"),
+    ],
+)
+def test_adding_invalid_where_condition_raises_error(
+    conditions: Iterable[Any]
+) -> None:
+    with pytest.raises(TypeError):
+        SelectQuery().where(*conditions)
