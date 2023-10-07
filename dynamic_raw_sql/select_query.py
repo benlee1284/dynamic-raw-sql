@@ -44,10 +44,17 @@ class SelectQuery:
                 f"Type {type(select_elements)} was given."
             )
 
-        if group_by_elements is not None:
+        if group_by_elements is None:
+            self.__group_by_elements = []
+        elif isinstance(group_by_elements, Iterable) and not isinstance(
+            group_by_elements, str
+        ):
             self.__group_by_elements = list(group_by_elements)
         else:
-            self.__group_by_elements = []
+            raise TypeError(
+                "Param `group_by_elements` accepts only an iterable of literals. "
+                f"Type {type(group_by_elements)} was given."
+            )
 
     def from_(self, table: str) -> Self:
         if isinstance(table, str):
