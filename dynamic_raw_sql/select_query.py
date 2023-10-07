@@ -78,6 +78,8 @@ class SelectQuery:
             query_string += f" WHERE {' AND '.join(self.__where_conditions)}"
 
         if self.__group_by_elements:
-            query_string += f"GROUP BY {', '.join(str(x) for x in self.__group_by_elements)}"
+            query_string += (
+                f"GROUP BY {', '.join(str(x) for x in self.__group_by_elements)}"
+            )
 
         return query_string
