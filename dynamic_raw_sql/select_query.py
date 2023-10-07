@@ -8,7 +8,7 @@ class SelectQuery:
         from_table: str = None,
         select_elements: Iterable[Literal] = None,
         where_conditions: Iterable[str] = None,
-        group_by: Iterable[Any] = None,
+        group_by_elements: Iterable[Any] = None,
     ) -> None:
         if isinstance(from_table, str) or from_table is None:
             self.__from_table = from_table
@@ -44,8 +44,8 @@ class SelectQuery:
                 f"Type {type(select_elements)} was given."
             )
 
-        if group_by is not None:
-            self.__group_by_elements = list(group_by)
+        if group_by_elements is not None:
+            self.__group_by_elements = list(group_by_elements)
         else:
             self.__group_by_elements = []
 

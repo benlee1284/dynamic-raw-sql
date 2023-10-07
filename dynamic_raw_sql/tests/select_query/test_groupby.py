@@ -19,5 +19,5 @@ from dynamic_raw_sql import SelectQuery
 def test_instantiate_query_with_groupby_clause(
     group_by_clauses: Iterable[Any], expected_query: str
 ) -> None:
-    query = SelectQuery(group_by=group_by_clauses)
+    query = SelectQuery(group_by_elements=group_by_clauses)
     assert query.build() == expected_query
