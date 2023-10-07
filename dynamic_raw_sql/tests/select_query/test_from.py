@@ -15,12 +15,20 @@ def test_add_from_clause_to_empty_query() -> None:
     assert query.build() == "SELECT  FROM table"
 
 
-def test_invalid_from_clause_raises_typeerror() -> None:
+def test_adding_invalid_from_clause_raises_typeerror() -> None:
     with pytest.raises(TypeError):
         SelectQuery().from_(1)
 
     with pytest.raises(TypeError):
         SelectQuery().from_(['table1', 'table2'])
+
+
+def test_instantiating_with_invalid_from_clause_raises_typeerror() -> None:
+    with pytest.raises(TypeError):
+        SelectQuery(from_table=1)
+
+    with pytest.raises(TypeError):
+        SelectQuery(from_table=['table1', 'table2'])
 
 
 def test_add_from_clause_to_existing_query() -> None:
