@@ -39,8 +39,14 @@ def test_add_select_statements_to_existing_query(
 ) -> None:
     query = SelectQuery(select_elements=["column", "other_column"])
     query = query.select(*statements)
-    print(query.__dict__)
     assert query.build() == expected_query
+
+
+def test_add_select_statements_iteratively() -> None:
+    query = SelectQuery(select_elements=["column"])
+    query = query.select("other_column")
+    query = query.select(1)
+    assert query.build() == "SELECT column, other_column, 1"
 
 
 @pytest.mark.parametrize(
