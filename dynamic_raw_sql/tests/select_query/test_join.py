@@ -26,7 +26,7 @@ def test_instantiate_query_with_join_clause() -> None:
         pytest.param([1, 2], id="list of ints"),
     ],
 )
-def test_instantiating_query_with_invalid_join_clause_erros(joins: Any) -> None:
+def test_instantiating_query_with_invalid_join_clause_errors(joins: Any) -> None:
     with pytest.raises(TypeError):
         SelectQuery(joins=joins)
 
@@ -90,3 +90,15 @@ def test_add_join_clauses_iteratively() -> None:
         "INNER JOIN table2 ON 1=1 "
         "LEFT OUTER JOIN table3 ON column_1=column_2"
     )
+
+
+@pytest.mark.parametrize(
+    "joins",
+    [
+        pytest.param([1], id="int"),
+        pytest.param([1, 2], id="list of ints"),
+    ],
+)
+def test_adding_invalid_join_clauses_errors(joins: Any) -> None:
+    with pytest.raises(TypeError):
+        SelectQuery().join(*joins)
