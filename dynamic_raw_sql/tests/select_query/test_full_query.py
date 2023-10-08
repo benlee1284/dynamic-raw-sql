@@ -19,6 +19,7 @@ def test_full_query() -> None:
             "column_1",
             "column_2",
         ],
+        having_conditions=["1=1", "column_1=42", "column_2=144 OR column_3=20"],
         order_by_elements=[
             "column_1",
             "column_2",
@@ -31,5 +32,6 @@ def test_full_query() -> None:
         "LEFT OUTER JOIN table3 ON column_1=column_2 "
         "WHERE 1=1 AND column_1=42 AND column_2=144 OR column_3=20 "
         "GROUP BY column_1, column_2 "
+        "HAVING 1=1 AND column_1=42 AND column_2=144 OR column_3=20 "
         "ORDER BY column_1, column_2"
     )
