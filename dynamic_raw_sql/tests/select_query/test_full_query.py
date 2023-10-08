@@ -19,6 +19,10 @@ def test_full_query() -> None:
             "column_1",
             "column_2",
         ],
+        order_by_elements=[
+            "column_1",
+            "column_2",
+        ],
     )
     assert (
         query.build() == "SELECT column_1, column_2, SUM(column_3), 1 "
@@ -26,5 +30,6 @@ def test_full_query() -> None:
         "INNER JOIN table2 ON 1=1 "
         "LEFT OUTER JOIN table3 ON column_1=column_2 "
         "WHERE 1=1 AND column_1=42 AND column_2=144 OR column_3=20 "
-        "GROUP BY column_1, column_2"
+        "GROUP BY column_1, column_2 "
+        "ORDER BY column_1, column_2"
     )
