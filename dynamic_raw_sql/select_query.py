@@ -99,6 +99,8 @@ class SelectQuery:
         return self
 
     def join(self, *statements: tuple[str]) -> Self:
+        if not all(isinstance(statement, str) for statement in statements):
+            raise TypeError("Joins must all be of type string.")
         self.__joins += list(statements)
         return self
 
