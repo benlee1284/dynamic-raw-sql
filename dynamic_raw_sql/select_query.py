@@ -9,6 +9,7 @@ class SelectQuery:
         "__joins",
         "__where_conditions",
         "__group_by_elements",
+        "__having_conditions",
         "__order_by_elements",
     )
 
@@ -17,6 +18,7 @@ class SelectQuery:
     __joins: list[str]
     __where_conditions: list[str]
     __group_by_elements: list[Any]
+    __having_conditions: list[str]
     __order_by_elements: list[Any]
 
     def __init__(
@@ -26,6 +28,7 @@ class SelectQuery:
         joins: Iterable[str] = None,
         where_conditions: Iterable[str] = None,
         group_by_elements: Iterable[Any] = None,
+        having_conditions: Iterable[str] = None,
         order_by_elements: Iterable[Any] = None,
     ) -> None:
         if isinstance(from_table, str) or from_table is None:
@@ -88,6 +91,20 @@ class SelectQuery:
                 f"Type {type(group_by_elements)} was given."
             )
 
+        if having_conditions is None:
+            self.__having_conditions = []
+        elif (
+            isinstance(having_conditions, Iterable)
+            and not isinstance(having_conditions, str)
+            and all(isinstance(condition, str) for condition in having_conditions)
+        ):
+            self.__having_conditions = list(having_conditions)
+        else:
+            raise TypeError(
+                "Param `having_conditions` accepts only an iterable of string literals. "
+                f"Type {type(select_elements)} was given."
+            )
+
         if order_by_elements is None:
             self.__order_by_elements = []
         elif isinstance(order_by_elements, Iterable) and not isinstance(
@@ -129,6 +146,12 @@ class SelectQuery:
         self.__group_by_elements += list(statements)
         return self
 
+    def having(self, *conditions: tuple[str]) -> Self:
+        if not all(isinstance(condition, str) for condition in conditions):
+            raise TypeError("Having conditions must all be of type string.")
+        self.__having_conditions += list(conditions)
+        return self
+
     def order_by(self, *statements: tuple[Any]) -> Self:
         self.__order_by_elements += list(statements)
         return self
@@ -149,6 +172,9 @@ class SelectQuery:
             query_string += (
                 f" GROUP BY {', '.join(str(x) for x in self.__group_by_elements)}"
             )
+
+        if self.__having_conditions:
+            query_string += f" HAVING {' AND '.join(self.__having_conditions)}"
 
         if self.__order_by_elements:
             query_string += (
