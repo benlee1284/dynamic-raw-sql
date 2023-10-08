@@ -9,6 +9,7 @@ class SelectQuery:
         "__joins",
         "__where_conditions",
         "__group_by_elements",
+        "__order_by_elements",
     )
 
     __from_table: str
@@ -16,6 +17,7 @@ class SelectQuery:
     __joins: list[str]
     __where_conditions: list[str]
     __group_by_elements: list[Any]
+    __order_by_elements: list[Any]
 
     def __init__(
         self,
@@ -24,6 +26,7 @@ class SelectQuery:
         joins: Iterable[str] = None,
         where_conditions: Iterable[str] = None,
         group_by_elements: Iterable[Any] = None,
+        order_by_elements: Iterable[Any] = None,
     ) -> None:
         if isinstance(from_table, str) or from_table is None:
             self.__from_table = from_table
@@ -85,6 +88,18 @@ class SelectQuery:
                 f"Type {type(group_by_elements)} was given."
             )
 
+        if order_by_elements is None:
+            self.__order_by_elements = []
+        elif isinstance(order_by_elements, Iterable) and not isinstance(
+            order_by_elements, str
+        ):
+            self.__order_by_elements = list(order_by_elements)
+        else:
+            raise TypeError(
+                "Param `order_by_elements` accepts only an iterable of literals. "
+                f"Type {type(order_by_elements)} was given."
+            )
+
     def from_(self, table: str) -> Self:
         if isinstance(table, str):
             self.__from_table = table
@@ -114,6 +129,10 @@ class SelectQuery:
         self.__group_by_elements += list(statements)
         return self
 
+    def order_by(self, *statements: tuple[Any]) -> Self:
+        self.__order_by_elements += list(statements)
+        return self
+
     def build(self) -> str:
         "Build SQL query string"
         query_string = f"SELECT {', '.join(str(x) for x in self.__select_elements)}"
@@ -129,6 +148,11 @@ class SelectQuery:
         if self.__group_by_elements:
             query_string += (
                 f" GROUP BY {', '.join(str(x) for x in self.__group_by_elements)}"
+            )
+
+        if self.__order_by_elements:
+            query_string += (
+                f" ORDER BY {', '.join(str(x) for x in self.__order_by_elements)}"
             )
 
         return query_string
